@@ -19,6 +19,7 @@ panel_resources = gnome.compile_resources(
 
 panel_sources = [
     'main.c',
+    'panel.c',
     'panel-manager.c',
     panel_resources,
 ]
