@@ -14,6 +14,7 @@
 
 BUDGIE_BEGIN_PEDANTIC
 #include "panel-manager.h"
+#include "panel.h"
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 BUDGIE_END_PEDANTIC
@@ -24,6 +25,7 @@ DEF_AUTOFREE(GOptionContext, g_option_context_free)
 DEF_AUTOFREE(GError, g_error_free)
 DEF_AUTOFREE(gchar, g_free)
 DEF_AUTOFREE(BudgiePanelManager, g_object_unref)
+DEF_AUTOFREE(GtkWidget, gtk_widget_destroy)
 
 static gboolean replace = FALSE;
 static gboolean reset_manager = FALSE;
@@ -41,6 +43,10 @@ int main(int argc, char **argv)
         autofree(GOptionContext) *context = NULL;
         autofree(GError) *error = NULL;
         autofree(BudgiePanelManager) *manager = NULL;
+        /* TESTING */
+        autofree(GtkWidget) *panel = NULL;
+
+        gtk_init(&argc, &argv);
 
         /* Hook up locales */
         setlocale(LC_ALL, "");
@@ -60,9 +66,11 @@ int main(int argc, char **argv)
                 return EXIT_FAILURE;
         }
 
+        /* TODO: Make Manager own Panels. This is just testing code */
         manager = budgie_panel_manager_new();
-        /* TODO: Run the main loop with our manager
-        gtk_main(); */
+        panel = budgie_panel_new();
+
+        gtk_main();
 
         return EXIT_SUCCESS;
 }
