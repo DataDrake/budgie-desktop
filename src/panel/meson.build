@@ -18,11 +18,7 @@ panel_resources = gnome.compile_resources(
 )
 
 panel_sources = [
-    'main.vala',
-    'manager.vala',
-    'panel.vala',
-    'popovers.vala',
-    'uuid.vala',
+    'main.c',
     panel_resources,
 ]
 
@@ -42,36 +38,18 @@ panel_deps = [
 
 top_vapidir = join_paths(meson.source_root(), 'vapi')
 
-budgie_panel_vala_args = [
-        '--vapidir', dir_libtheme,
-        '--vapidir', dir_libconfig,
-        '--vapidir', dir_libplugin,
-        '--vapidir', top_vapidir,
-        '--pkg', 'theme',
-        '--pkg', 'budgie-config',
-        '--pkg', 'gvc-1.0',
-        '--pkg', 'budgie-1.0',
-        '--pkg', 'libpeas-1.0',
-        '--pkg', 'gtk+-3.0',
-        '--pkg', 'gdk-x11-3.0',
-        # Make gresource work
-        '--target-glib=2.38',
-        '--gresources=' + gresource,
-]
-
-# For popdown/popup methods
-if dep_gtk322.found()
-    budgie_panel_vala_args += ['-D', 'HAVE_GTK_322']
-endif
-
 budgie_panel_c_args = [
     '-DWNCK_I_KNOW_THIS_IS_UNSTABLE'
 ]
 
+# For popdown/popup methods
+if dep_gtk322.found()
+    budgie_panel_c_args += ['-D', 'HAVE_GTK_322']
+endif
+
 executable(
     'budgie-panel', panel_sources,
     dependencies: panel_deps,
-    vala_args: budgie_panel_vala_args,
     c_args: budgie_panel_c_args,
     install: true,
 )
